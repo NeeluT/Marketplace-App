@@ -1,1 +1,30 @@
-<%-body%>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/home/global.css">
+    <link rel="stylesheet" href="/home/header.css">
+    <link rel="stylesheet" href="/home/style.css" />
+    <title>Marketplace</title>
+  </head>
+  <body>
+    <section class="grid">
+      <%-include("./header.ejs")%>
+      <%-include("./aside.ejs")%>
+      <main>
+        <div class="main-button">
+          <a href="#">
+            <img src="./img/suitcase.svg" alt="" />
+            <span>Land a job in Marketplace</span>
+          </a>
+        </div>
+        <h1 class="main-title">Marketpllace: All types of posts and services in Atlanta</h1>
+        <div class="main-grid-card">
+          <%-body%>
+        </div>
+      </main>
+    </section>
+  </body>
+</html>
