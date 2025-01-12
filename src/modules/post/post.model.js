@@ -9,6 +9,7 @@ const PostSchema = new Schema({
     district: {type: String, required: false},
     coordinate: {type: [Number], required: true}, //51.215121, 52.68541521
     images:  {type: [String], required: false, default:[]},
+    options: {type: Object, default: {}}
     
 },{
     timestamps: true

@@ -22,6 +22,7 @@
         </ul>
         <%}%> <%}else{%>
           <form action="/post/create" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="category" id="category" value="<%=category%>">
           <div class="p-2">
             <label>Photos</label>
             <input type="file" name="images" multiple class="form-control" />
@@ -30,7 +31,7 @@
             <label>Title</label>
             <input
               type="text"
-              name="title_post"
+              name="title"
               placeholder="Title"
               class="form-control" />
           </div>

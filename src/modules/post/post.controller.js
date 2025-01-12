@@ -17,11 +17,11 @@ class PostController {
         try {
             let {slug} = req.query
             let showBack = false
-            let options
+            let options, category
             let match = {parent: null}
             if(slug) {
                 slug = slug.trim()
-                const category = await CategoryModel.findOne({slug})
+                category = await CategoryModel.findOne({slug})
                 if(!category) throw new createHttpError.NotFound(PostMessage.NotFound)
                 options = await this.#service.getCategoryOptions(category._id)
             if(options.length === 0) options = null
@@ -38,6 +38,7 @@ class PostController {
             res.render("./pages/panel/create-post.ejs", {
                 categories,
                 showBack,
+                category: category?._id.toString(),
                 options
             })
         } catch(error) {
@@ -46,14 +47,15 @@ class PostController {
     }
     async create(req, res, next) {
     try {
-        console.log(req.body);
+        console.log(req.files);
+        const images = req?.files?.map(image => image?.path?.slice(7))
         const {title, description: content, category} = req.body
-        const options = removePropertyInObject(req.body, ["title_post", "description", "category", "images"])
+        const options = removePropertyInObject(req.body, ["title", "description", "category", "images"])
         await this.#service.create({
             title,
             content,
-            category: new Types.ObjectId(category),
-            images: [],
+            category: new Types.ObjectId(),
+            images,
             options,
         })
         return res.status(HttpCodes.CREATED).json({
