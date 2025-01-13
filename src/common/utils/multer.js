@@ -1,7 +1,6 @@
 const multer  = require('multer')
 const fs = require("fs")
 const path = require('path');
-const { MIMEType } = require('util')
 const createHttpError = require('http-errors')
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {

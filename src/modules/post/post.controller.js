@@ -9,6 +9,7 @@ const {removePropertyInObject} = require("../../common/utils/functions")
 
 class PostController {
     #service
+    success_message
     constructor() {
         autoBind(this)
         this.#service = postService
@@ -47,33 +48,46 @@ class PostController {
     }
     async create(req, res, next) {
     try {
-        console.log(req.files);
+        const userId = req.user._id
         const images = req?.files?.map(image => image?.path?.slice(7))
         const {title, description: content, category} = req.body
         const options = removePropertyInObject(req.body, ["title", "description", "category", "images"])
         await this.#service.create({
+            userId,
             title,
             content,
             category: new Types.ObjectId(),
             images,
             options,
         })
-        return res.status(HttpCodes.CREATED).json({
-            message: PostMessage.Created
-        })
+        this.success_message = PostMessage.Created
+        return res.redirect('/post/my')
         } catch(error) {
             next(error)    
         }
     }
 
-    async find(req, res, next) {
+    async findMyPosts(req, res, next) {
     try {
+        const userId = req.user._id
+        const posts = await this.#service.find(userId)
+        res.render("./pages/panel/posts.ejs", {
+            posts, 
+            count: posts.length,
+            success_message: null,
+            error_message: null
+        })
+        this.success_message = null
         } catch(error) {
             next(error)    
         }
     }
     async remove(req, res, next) {
     try {
+        const {id} = req.params
+        await this.#service.remove(id)
+        this.success_message = PostMessage.Deleted;
+        return res.redirect('/post/my');
         } catch(error) {
             next(error)    
         }

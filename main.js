@@ -6,6 +6,7 @@ const NotFoundHandler = require("./src/common/exception/not-found-habdler")
 const AllExceptionHandler = require("./src/common/exception/all-exception.handler")
 const cookieParser = require("cookie-parser")
 const expressEjsLayouts = require("express-ejs-layouts")
+const moment = require("moment")
 dotenv.config()
 async function main() {
     const app = express()
@@ -19,6 +20,7 @@ async function main() {
     app.set("view engine", "ejs")
     app.set("layout", "./layouts/panel/main.ejs")
     app.use(mainRouter)
+    app.locals.moment = moment
     swaggerConfig(app)
     NotFoundHandler(app)
     AllExceptionHandler(app)
