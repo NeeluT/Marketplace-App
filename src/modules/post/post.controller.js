@@ -50,11 +50,12 @@ class PostController {
     try {
         const userId = req.user._id
         const images = req?.files?.map(image => image?.path?.slice(7))
-        const {title, description: content, category} = req.body
-        const options = removePropertyInObject(req.body, ["title", "description", "category", "images"])
+        const {title, description: content, category, amount} = req.body
+        const options = removePropertyInObject(req.body, ["title", "description", "category", "images", "amount"])
         await this.#service.create({
             userId,
             title,
+            amount,
             content,
             category: new Types.ObjectId(),
             images,
@@ -74,7 +75,7 @@ class PostController {
         res.render("./pages/panel/posts.ejs", {
             posts, 
             count: posts.length,
-            success_message: null,
+            success_message: this.success_message,
             error_message: null
         })
         this.success_message = null
@@ -88,6 +89,30 @@ class PostController {
         await this.#service.remove(id)
         this.success_message = PostMessage.Deleted;
         return res.redirect('/post/my');
+        } catch(error) {
+            next(error)    
+        }
+    }
+    async showPost(req, res, next) {
+    try {
+        const {id} = req.params
+        const post = await this.#service.checkExist(id)
+        res.locals.layout = "./layouts/website/main.ejs"
+        res.render('./pages/home/post.ejs', {
+            post
+        });
+        } catch(error) {
+            next(error)    
+        }
+    }
+    async postList(req, res, next) {
+    try {
+        const query = req.query
+        const posts = await this.#service.findAll(query)
+        res.locals.layout = "./layouts/website/main.ejs"
+        res.render('./pages/home/index.ejs', {
+            posts
+        });
         } catch(error) {
             next(error)    
         }

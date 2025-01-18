@@ -5,10 +5,10 @@ const Authrization = require("../../common/guard/authorization.guard")
 const router = Router()
 
 router.get("/create", Authrization, PostController.createPostPage)
-router.post("/create", Authrization, upload.array("images", 10) ,PostController.create)
-router.get("/my", Authrization,PostController.findMyPosts)
-router.get("/delete/:id", Authrization,PostController.remove)
-
+router.post("/create", Authrization, upload.array("images", 10) , PostController.create)
+router.get("/my", Authrization, PostController.findMyPosts)
+router.delete("/delete/:id", Authrization, PostController.remove)
+router.get("/:id", PostController.showPost)
 
 module.exports = {
     PostRouter: router
